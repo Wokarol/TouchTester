@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Wokarol.PoolSystem {
 	public class PoolObject : MonoBehaviour {
-		public string objectName;
+		public PoolObjectIdentificator objectName;
 		private PoolManager manager;
 
 		public System.Action OnActivate;

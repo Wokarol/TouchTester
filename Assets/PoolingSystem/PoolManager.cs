@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Wokarol.PoolSystem {
 	public class PoolManager : MonoBehaviour {
 		[SerializeField] PoolObjectToAdd[] pools;
-		Dictionary<string, int> nameToIndex = new Dictionary<string, int>();
+		Dictionary<PoolObjectIdentificator, int> nameToIndex = new Dictionary<PoolObjectIdentificator, int>();
 
 		static PoolManager instance;
 		private void Awake () {
@@ -25,7 +25,7 @@ namespace Wokarol.PoolSystem {
 			}
 		}
 
-		internal void RegisterDestroyed (string _name, PoolObject poolObject) {
+		internal void RegisterDestroyed (PoolObjectIdentificator _name, PoolObject poolObject) {
 			if (!instance.nameToIndex.ContainsKey(_name)) {
 				Debug.LogError("<color=red>There is no pool named " + _name + " in Dictionary</color>");
 				return;
@@ -33,7 +33,7 @@ namespace Wokarol.PoolSystem {
 			instance.pools[instance.nameToIndex[_name]].AddObject(poolObject);
 		}
 
-		public static PoolObject Spawn(string _name, Vector3 pos, Quaternion rot) {
+		public static PoolObject Spawn(PoolObjectIdentificator _name, Vector3 pos, Quaternion rot) {
 			if (!instance.nameToIndex.ContainsKey(_name)) {
 				Debug.LogError("<color=red>There is no pool named " + _name + " in Dictionary</color>");
 				return null;

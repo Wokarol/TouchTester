@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0941b7d6e6b7375469bddbf37bad4f85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: PressIcon
+  objectName: {fileID: 11400000, guid: d295407a9e130184bbe0b93542e069ca, type: 2}
 --- !u!114 &114896434482825510
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Wokarol.Testing {
 	public class SpawnOnMouseTester : MonoBehaviour {
+		[SerializeField] PoolSystem.PoolObjectIdentificator identificator;
 		[SerializeField] bool useMouse;
 
 		PoolSystem.PoolObject poolObject;
@@ -11,12 +12,11 @@ namespace Wokarol.Testing {
 		void Update () {
 			// Mouse
 			if (useMouse) {
-				Input.simulateMouseWithTouches = false;
 				Camera main = Camera.main;
 				Vector3 mousePos = main.ScreenToWorldPoint(Input.mousePosition) - (Vector3.forward * main.transform.position.z);
 				if (Input.GetMouseButtonDown(0)) {
 
-					poolObject = PoolSystem.PoolManager.Spawn("PressIcon", mousePos, Quaternion.identity);
+					poolObject = PoolSystem.PoolManager.Spawn(identificator, mousePos, Quaternion.identity);
 
 					Debug.DrawLine(Vector3.zero, mousePos);
 				}
@@ -27,22 +27,22 @@ namespace Wokarol.Testing {
 				if (poolObject != null) {
 					poolObject.transform.position = mousePos;
 				}
-			}
-
-			// Touch
-			if(Input.touchCount > 0) {
-				Touch touch = Input.GetTouch(0);
-				Camera main = Camera.main;
-				Vector3 touchPos = main.ScreenToWorldPoint(touch.position) - (Vector3.forward * main.transform.position.z);
-				if (touch.phase == TouchPhase.Began) {
-					poolObject = PoolSystem.PoolManager.Spawn("PressIcon", touchPos, Quaternion.identity);
-					Debug.DrawLine(Vector3.zero, touchPos);
-				} else {
-					poolObject.transform.position = touchPos;
+			} else {
+				// Touch
+				if (Input.touchCount > 0) {
+					Touch touch = Input.GetTouch(0);
+					Camera main = Camera.main;
+					Vector3 touchPos = main.ScreenToWorldPoint(touch.position) - (Vector3.forward * main.transform.position.z);
+					if (touch.phase == TouchPhase.Began) {
+						poolObject = PoolSystem.PoolManager.Spawn(identificator, touchPos, Quaternion.identity);
+						Debug.DrawLine(Vector3.zero, touchPos);
+					} else {
+						poolObject.transform.position = touchPos;
+					}
+				} else if (poolObject != null) {
+					poolObject.Destroy();
+					poolObject = null;
 				}
-			} else if( poolObject != null) {
-				poolObject.Destroy();
-				poolObject = null;
 			}
 		}
 	}
