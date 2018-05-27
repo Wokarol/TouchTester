@@ -39,8 +39,12 @@ namespace Wokarol.PoolSystem {
 				return null;
 			}
 			if(instance.pools[instance.nameToIndex[_name]].ObjectsToUse <= 0) {
-				Debug.LogError("<color=red>There is no more elements in pool named " + _name + "</color>");
-				return null;
+				//Debug.LogError("<color=red>There is no more elements in pool named " + _name + "</color>");
+				//return null;
+				Debug.Log("Added");
+				for (int j = 0; j < instance.pools[instance.nameToIndex[_name]].growBy; j++) {
+					instance.pools[instance.nameToIndex[_name]].AddObject(Instantiate(instance.pools[instance.nameToIndex[_name]].prefab, instance.transform));
+				}
 			}
 			PoolObject _obj = instance.pools[instance.nameToIndex[_name]].GetObject();
 			_obj.transform.SetPositionAndRotation(pos, rot);

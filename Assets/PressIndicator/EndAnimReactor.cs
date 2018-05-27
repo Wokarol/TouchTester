@@ -5,20 +5,17 @@ using UnityEngine;
 using Wokarol.PoolSystem;
 
 namespace Wokarol.Reactor {
-	public class StartAnimReactor :MonoBehaviour {
+	public class EndAnimReactor :MonoBehaviour {
 		[SerializeField] PoolObject poolObject;
 		[Space]
 		[SerializeField] Animator animator;
-		[SerializeField] SpriteRenderer sprite;
 
 		private void OnEnable () {
-			sprite.enabled = false;
-			poolObject.OnActivate += OnActivateObject;
+			poolObject.OnDestroy += OnDestroyObject;
 		}
 
-		public void OnActivateObject () {
-			sprite.enabled = true;
-			animator.SetTrigger("Start");
+		public void OnDestroyObject () {
+			animator.SetTrigger("End");
 		}
 	} 
 }

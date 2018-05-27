@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212745850863661528}
   - component: {fileID: 95585910287195532}
   - component: {fileID: 114896434482825510}
+  - component: {fileID: 114365993302885610}
   - component: {fileID: 114433484984386660}
   m_Layer: 0
   m_Name: Icon
@@ -66,7 +67,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1665183243730168}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.153, y: -0.445, z: -4.035307}
+  m_LocalPosition: {x: 0.08, y: -2.73, z: -4.035307}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4691322185864714}
@@ -91,6 +92,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114365993302885610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123678460483154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8823a6f727d78724c95f66cd45c1f24e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poolObject: {fileID: 114422246464316700}
+  animator: {fileID: 95585910287195532}
 --- !u!114 &114422246464316700
 MonoBehaviour:
   m_ObjectHideFlags: 1
