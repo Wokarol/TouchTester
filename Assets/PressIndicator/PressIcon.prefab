@@ -23,7 +23,6 @@ GameObject:
   - component: {fileID: 95585910287195532}
   - component: {fileID: 114896434482825510}
   - component: {fileID: 114365993302885610}
-  - component: {fileID: 114433484984386660}
   m_Layer: 0
   m_Name: Icon
   m_TagString: Untagged
@@ -117,18 +116,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: PressIcon
---- !u!114 &114433484984386660
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123678460483154}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e0ba76928a7f0144888a6846ee0ad77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  poolObject: {fileID: 114422246464316700}
 --- !u!114 &114896434482825510
 MonoBehaviour:
   m_ObjectHideFlags: 1
