@@ -4,24 +4,45 @@ using UnityEngine;
 
 namespace Wokarol.Testing {
 	public class SpawnOnMouseTester : MonoBehaviour {
+		[SerializeField] bool useMouse;
 
 		PoolSystem.PoolObject poolObject;
 
 		void Update () {
-			Camera main = Camera.main;
-			Vector3 mousePos = main.ScreenToWorldPoint(Input.mousePosition) - (Vector3.forward * main.transform.position.z);
-			if (Input.GetMouseButtonDown(0)) {
+			// Mouse
+			if (useMouse) {
+				Input.simulateMouseWithTouches = false;
+				Camera main = Camera.main;
+				Vector3 mousePos = main.ScreenToWorldPoint(Input.mousePosition) - (Vector3.forward * main.transform.position.z);
+				if (Input.GetMouseButtonDown(0)) {
 
-				poolObject = PoolSystem.PoolManager.Spawn("PressIcon", mousePos, Quaternion.identity);
+					poolObject = PoolSystem.PoolManager.Spawn("PressIcon", mousePos, Quaternion.identity);
 
-				Debug.DrawLine(Vector3.zero, mousePos);
+					Debug.DrawLine(Vector3.zero, mousePos);
+				}
+				if (Input.GetMouseButtonUp(0)) {
+					poolObject.Destroy();
+					poolObject = null;
+				}
+				if (poolObject != null) {
+					poolObject.transform.position = mousePos;
+				}
 			}
-			if (Input.GetMouseButtonUp(0)) {
+
+			// Touch
+			if(Input.touchCount > 0) {
+				Touch touch = Input.GetTouch(0);
+				Camera main = Camera.main;
+				Vector3 touchPos = main.ScreenToWorldPoint(touch.position) - (Vector3.forward * main.transform.position.z);
+				if (touch.phase == TouchPhase.Began) {
+					poolObject = PoolSystem.PoolManager.Spawn("PressIcon", touchPos, Quaternion.identity);
+					Debug.DrawLine(Vector3.zero, touchPos);
+				} else {
+					poolObject.transform.position = touchPos;
+				}
+			} else if( poolObject != null) {
 				poolObject.Destroy();
 				poolObject = null;
-			}
-			if (poolObject != null) {
-				poolObject.transform.position = mousePos;
 			}
 		}
 	}
