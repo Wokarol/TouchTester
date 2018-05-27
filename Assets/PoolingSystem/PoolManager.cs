@@ -1,49 +1,76 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Wokarol.PoolSystem {
 	public class PoolManager : MonoBehaviour {
-		[SerializeField] PoolObjectToAdd[] poolObjectsToAdd;
-		Dictionary<string, Pool> pools = new Dictionary<string, Pool>();
+		[SerializeField] PoolObjectToAdd[] pools;
+		Dictionary<string, int> nameToIndex = new Dictionary<string, int>();
 
-		public static PoolManager Instance { get; private set; }
+		static PoolManager instance;
 		private void Awake () {
-			foreach (PoolObjectToAdd poolObjectToAdd in poolObjectsToAdd) {
-
-				Queue<PoolObject> objects = new Queue<PoolObject>();
-				for (int i = 0; i < poolObjectToAdd.startCount; i++) {
-					PoolObject poolObject = Instantiate(poolObjectToAdd.poolObject, transform);
-					objects.Enqueue(poolObject);
-				}
-
-				Pool pool = new Pool(objects, poolObjectToAdd.growBy);
-				pools.Add(poolObjectToAdd.poolObject.objectName, pool);
+			if(instance != null) {
+				Destroy(gameObject);
+				return;
 			}
+			instance = this;
+
+			for (int i = 0; i < pools.Length; i++) {
+				nameToIndex.Add(pools[i].prefab.objectName, i);
+
+				for (int j = 0; j < pools[i].startCount; j++) {
+					pools[i].AddObject(Instantiate(pools[i].prefab, transform));
+				}
+			}
+		}
+
+		internal void RegisterDestroyed (string _name, PoolObject poolObject) {
+			if (!instance.nameToIndex.ContainsKey(_name)) {
+				Debug.LogError("<color=red>There is no pool named " + _name + " in Dictionary</color>");
+				return;
+			}
+			instance.pools[instance.nameToIndex[_name]].AddObject(poolObject);
+		}
+
+		public static PoolObject Spawn(string _name, Vector3 pos, Quaternion rot) {
+			if (!instance.nameToIndex.ContainsKey(_name)) {
+				Debug.LogError("<color=red>There is no pool named " + _name + " in Dictionary</color>");
+				return null;
+			}
+			if(instance.pools[instance.nameToIndex[_name]].ObjectsToUse <= 0) {
+				Debug.LogError("<color=red>There is no more elements in pool named " + _name + "</color>");
+				return null;
+			}
+			PoolObject _obj = instance.pools[instance.nameToIndex[_name]].GetObject();
+			_obj.transform.SetPositionAndRotation(pos, rot);
+
+			_obj.Activate(instance);
+
+			return _obj;
 		}
 
 	}
 
 	[System.Serializable]
 	class PoolObjectToAdd {
-		public PoolObject poolObject;
-		public float startCount;
-		public float growBy;
+		[SerializeField] internal PoolObject prefab;
+		[Space]
+		[SerializeField] internal float startCount;
+		[SerializeField] internal float growBy;
 
-		public PoolObjectToAdd (PoolObject poolObject, float startCount, float growBy) {
-			this.poolObject = poolObject;
-			this.startCount = startCount;
-			this.growBy = growBy;
+		Queue<PoolObject> objects = new Queue<PoolObject>();
+		internal int ObjectsToUse { get; private set; } = 0;
+
+
+
+		internal void AddObject(PoolObject _obj) {
+			objects.Enqueue(_obj);
+			ObjectsToUse++;
 		}
-	}
-
-	class Pool {
-		public Queue<PoolObject> objects;
-		public float growBy;
-
-		public Pool (Queue<PoolObject> objects, float growBy) {
-			this.objects = objects;
-			this.growBy = growBy;
+		internal PoolObject GetObject () {
+			ObjectsToUse--;
+			return objects.Dequeue();
 		}
 	}
 }
